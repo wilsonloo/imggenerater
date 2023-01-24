@@ -13,6 +13,12 @@ def draw_lines(img, lines):
             pt_b = (line['points'][k+2], line['points'][k+3])
             cv.line(img, pt_a, pt_b, COLOR_WHITE)
 
+def draw_rects(img, rects):
+    for rect in rects:
+        pt_start = (rect['x'], rect['y'])
+        pt_end = (rect['x'] + rect['w'], rect['y']+rect['h'])
+        cv.rectangle(img, pt_start, pt_end, COLOR_WHITE, 1)
+
 def handle_file(path):
     print("handling path:", path)
     file_obj = open(path, 'r')
@@ -23,6 +29,8 @@ def handle_file(path):
         img = np.zeros((data['heigh'], data['width'], 3), np.uint8)
         if "lines" in data:
             draw_lines(img, data['lines'])
+        if "rects" in data:
+            draw_rects(img, data['rects'])    
         cv.imwrite(os.path.splitext(path)[0]+".jpg", img)            
     finally:
         file_obj:close()
