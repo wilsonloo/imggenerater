@@ -6,6 +6,9 @@ import cv2 as cv
 
 COLOR_WHITE = (255, 255, 255)
 
+def parse_color(json_color):
+    return (json_color['b'], json_color['g'], json_color['r'])
+
 def draw_lines(img, lines):
     for line in lines:
         for k in range(0, len(line['points']), 4):
@@ -17,7 +20,11 @@ def draw_rects(img, rects):
     for rect in rects:
         pt_start = (rect['x'], rect['y'])
         pt_end = (rect['x'] + rect['w'], rect['y']+rect['h'])
-        cv.rectangle(img, pt_start, pt_end, COLOR_WHITE, 1)
+        color = COLOR_WHITE
+        if 'color' in rect:
+            color = parse_color(rect['color'])
+            print("color:", color)
+        cv.rectangle(img, pt_start, pt_end, color, 1)
 
 def handle_file(path):
     print("handling path:", path)
