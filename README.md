@@ -1,5 +1,5 @@
 # 基于Opencv 的图片生成器
-* 使用json文件配置，生成图片
+* 使用json文件配置，生成图片， 目前仅仅支持直线 和 矩形
 
 ## 依赖
 * python
@@ -33,6 +33,7 @@
             y : y,
             w : width,
             h : heigh,
+            id: 矩形id（string), 会在矩形左上角显示
         },
         ...
     ]
@@ -40,6 +41,12 @@
 ```
 
 ## Getting started
+* 基本用法
 ```sh
     python3 generate.py <json文件路径或目录>
+```
+
+* 测试, 将test_res 目录的所有json文件生成对应的图片
+```sh
+    python3 generate.py ./test_res
 ```

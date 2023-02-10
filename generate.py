@@ -3,6 +3,7 @@ import sys, os
 import json
 import numpy as np
 import cv2 as cv
+from PIL import Image, ImageDraw, ImageFont
 
 COLOR_WHITE = (255, 255, 255)
 
@@ -16,6 +17,15 @@ def draw_lines(img, lines):
             pt_b = (line['points'][k+2], line['points'][k+3])
             cv.line(img, pt_a, pt_b, COLOR_WHITE)
 
+def put_text(img, text, pos, color=COLOR_WHITE):
+    if isinstance(img, np.ndarray):
+        img = Image.fromarray(cv.cvtColor(img, cv.COLOR_BGR2RGB))
+    draw = ImageDraw.Draw(img)
+    fontStyle = ImageFont.truetype("font/simsun.ttc", 30, encoding="utf-8")
+    draw.text(pos, text, color, font=fontStyle)
+    img = cv.cvtColor(np.asarray(img), cv.COLOR_RGB2BGR)
+    return img
+
 def draw_rects(img, rects):
     for rect in rects:
         pt_start = (rect['x'], rect['y'])
@@ -23,8 +33,10 @@ def draw_rects(img, rects):
         color = COLOR_WHITE
         if 'color' in rect:
             color = parse_color(rect['color'])
-            print("color:", color)
         cv.rectangle(img, pt_start, pt_end, color, 1)
+        if 'id' in rect:
+            img = put_text(img, rect['id'], pt_start, color=(0, 255, 0))
+    return img
 
 def handle_file(path):
     print("handling path:", path)
@@ -37,7 +49,7 @@ def handle_file(path):
         if "lines" in data:
             draw_lines(img, data['lines'])
         if "rects" in data:
-            draw_rects(img, data['rects'])    
+            img = draw_rects(img, data['rects'])    
         cv.imwrite(os.path.splitext(path)[0]+".jpg", img)            
     finally:
         file_obj:close()
