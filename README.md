@@ -15,7 +15,7 @@
     
     lines: [
         {
-            color : 颜色(可选)，
+            color : 颜色(可选){r:?, g:?, b:?}，
             points : [
                 x1,
                 y1,
@@ -28,7 +28,7 @@
     ],
     rects: [
         {
-            color : 颜色(可选)，
+            color : 颜色(可选){r:?, g:?, b:?}，
             x : x,
             y : y,
             w : width,
