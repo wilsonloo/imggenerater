@@ -44,7 +44,7 @@ def handle_file(path):
     try:
         content = file_obj.read()
         data = json.loads(content)
-        print("data:", data)
+        # print("data:", data)
         img = np.zeros((data['heigh'], data['width'], 3), np.uint8)
         if "lines" in data:
             draw_lines(img, data['lines'])
